@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Box, Button, Image, Text, VStack} from 'native-base';
+import {Box, Button, VStack} from 'native-base';
 import React from 'react';
 import {RootStackParamList} from '../../App';
 
@@ -10,13 +10,24 @@ const Home = ({route, navigation}: Props) => {
     <Box mt={4} p={4}>
       <VStack space={4}>
         <Button
+          colorScheme="coolGray"
+          onPress={() => {
+            navigation.navigate('AllRoutes');
+          }}
+          size="lg">
+          Έναρξη Δρομολογίου
+        </Button>
+        <Button
+          colorScheme="coolGray"
           onPress={() => {
             navigation.navigate('CreateRoute');
           }}
           size="lg">
-          Έναρξη Νέου Δρομολογίου
+          Προσθήκη χωραφιού
         </Button>
-        <Button size="lg">Εύρεση Δρομολογίου</Button>
+        <Button colorScheme="coolGray" size="lg">
+          Διαχείριση Αυλής
+        </Button>
       </VStack>
     </Box>
   );
