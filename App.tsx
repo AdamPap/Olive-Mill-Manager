@@ -1,17 +1,19 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {extendTheme, NativeBaseProvider} from 'native-base';
-import React from 'react';
+import React, {UIEventHandler} from 'react';
 
 import CreateRoute from './src/screens/CreateRoute';
 import Home from './src/screens/Home';
 import ProfileScreen from './src/screens/ProfileScreen';
 
 import {RealmContext} from './src/models';
+import AllRoutes from './src/screens/AllRoutes';
 const {RealmProvider} = RealmContext;
 
 export type RootStackParamList = {
   Home: undefined;
+  AllRoutes: undefined;
   CreateRoute: undefined;
   Profile: undefined;
 };
@@ -43,7 +45,12 @@ const App = () => {
               name="CreateRoute"
               component={CreateRoute}
               // initialParams={{userId: 2}}
-              options={{title: 'Create Route'}}
+              options={{title: 'Προσθήκη Νέου Χωραφιού'}}
+            />
+            <Stack.Screen
+              name="AllRoutes"
+              component={AllRoutes}
+              options={{title: 'All Routes'}}
             />
             <Stack.Screen name="Profile" component={ProfileScreen} />
           </Stack.Navigator>
