@@ -8,6 +8,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
+    "copydb": "adb shell \"run-as com.olivemill cat /data/data/com.olivemill/files/default.realm\" > data.realm",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
