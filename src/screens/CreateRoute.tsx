@@ -1,70 +1,51 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Box, Text} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import {
+  Box,
+  Button,
+  FlatList,
+  FormControl,
+  Heading,
+  Input,
+  Modal,
+  Spinner,
+  Text,
+  TextArea,
+  VStack,
+} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {
+  Keyboard,
+  Linking,
+  NativeSyntheticEvent,
+  PermissionsAndroid,
+  Platform,
+  TextInputChangeEventData,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Geolocation, {GeoPosition} from 'react-native-geolocation-service';
-import {Button, PermissionsAndroid, StyleSheet, View} from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
-import {MAPBOX_TOKEN} from '@env';
 import {RootStackParamList} from '../../App';
 
-MapboxGL.setWellKnownTileServer('Mapbox');
-MapboxGL.setAccessToken(MAPBOX_TOKEN);
+import {RealmContext} from '../models';
+import {Field} from '../models/Field';
+const {useRealm, useQuery} = RealmContext;
 
-type Props = NativeStackScreenProps<RootStackParamList, 'CreateRoute'>;
+type FormValues = {fieldName: string; ownerName: string; notes: string};
 
-const CreateRoute = ({route, navigation}: Props) => {
+const CreateRoute = () => {
   const [location, setLocation] = useState<GeoPosition | null>();
-  const [coordinates] = useState([25.394438632803254, 35.05741642226443]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [offlinePackLength, setofflinePackLength] = useState(0);
+  const realm = useRealm();
 
   useEffect(() => {
-    getOfflinePacks();
+    const getLoc = async () => {
+      await getLocation();
+      setIsLoading(false);
+    };
+
+    getLoc();
   }, []);
-
-  useEffect(() => {
-    console.log(offlinePackLength);
-    offlinePackLength && createOfflinePack();
-  }, [offlinePackLength]);
-
-  const createOfflinePack = async () => {
-    if (!offlinePackLength) {
-      console.log('No Offline packs, downloading...');
-
-      try {
-        await MapboxGL.offlineManager.createPack(
-          {
-            name: 'offline-map',
-            styleURL: MapboxGL.StyleURL.Outdoors,
-            bounds: [
-              [25.1975, 25.6082],
-              [34.9742, 35.1488],
-            ],
-            minZoom: 12,
-            maxZoom: 16,
-          },
-          // progressListener, errorListener
-          // error => {
-          //   if (error) {
-          //     console.log('-> Offline map error: ', error);
-          //   }
-          // },
-          (offlineRegion, status) => console.log('', offlineRegion, status),
-          (offlineRegion, err) => console.log(offlineRegion, err),
-        );
-        console.log('Downloading end...');
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log('Offline packs already downloaded');
-    }
-  };
-
-  const getOfflinePacks = async () => {
-    const offlinePack = await MapboxGL.offlineManager.getPacks();
-    setofflinePackLength(offlinePack.length);
-  };
 
   const requestLocationPermission = async () => {
     try {
@@ -78,7 +59,7 @@ const CreateRoute = ({route, navigation}: Props) => {
           buttonPositive: 'OK',
         },
       );
-      console.log('granted', granted);
+
       if (granted === 'granted') {
         console.log('You can use Geolocation');
         return true;
@@ -91,14 +72,12 @@ const CreateRoute = ({route, navigation}: Props) => {
     }
   };
 
-  const getLocation = () => {
+  const getLocation = async () => {
     const result = requestLocationPermission();
     result.then(res => {
-      console.log('res is:', res);
       if (res) {
         Geolocation.getCurrentPosition(
           position => {
-            console.log(position);
             setLocation(position);
           },
           error => {
@@ -113,27 +92,142 @@ const CreateRoute = ({route, navigation}: Props) => {
     console.log(location);
   };
 
+  const openAddressOnMap = (label: string, lat: number, lng: number) => {
+    const scheme = Platform.select({
+      ios: 'maps:0,0?q=',
+      android: 'geo:0,0?q=',
+    });
+    const latLng = `${lat},${lng}`;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+    url && Linking.openURL(url);
+  };
+
+  const addField = ({fieldName, ownerName, notes}: FormValues) => {
+    try {
+      realm.write(() => {
+        realm.create(
+          'Field',
+          Field.generate(
+            fieldName,
+            ownerName,
+            location!.coords.longitude,
+            location!.coords.latitude,
+            notes,
+          ),
+        );
+      });
+    } catch (err) {
+      console.log("Something went wrong during 'Field' write", err);
+    }
+  };
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormValues>();
+
+  const onSubmit: SubmitHandler<FormValues> = data => {
+    console.log('submiting with ', data);
+    addField(data);
+  };
+
   return (
-    <Box>
-      <Box
-        paddingBottom={4}
-        display="flex"
-        alignItems="center"
-        justifyContent="center">
-        <View
-          style={{marginTop: 10, padding: 10, borderRadius: 10, width: '40%'}}>
-          <Button title="Get Location" onPress={getLocation} />
-        </View>
-        <Text>Longitude: {location?.coords.longitude}</Text>
-        <Text>Latitude: {location?.coords.latitude}</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Box>
+        {!isLoading && location ? (
+          <Box bg="white" borderRadius="md" shadow="2" m={4} p={3}>
+            <Box>
+              <Heading mt={2} size="md" textAlign="center">
+                {`[ ${location?.coords.longitude}, ${location?.coords.latitude} ]`}
+              </Heading>
+            </Box>
+
+            <VStack mt={4} space={3}>
+              <FormControl isRequired isInvalid={'fieldName' in errors}>
+                <FormControl.Label>Όνομα Χωραφιού</FormControl.Label>
+                <Controller
+                  control={control}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <Input
+                      onBlur={onBlur}
+                      placeholder="Όνομα Χωραφιού"
+                      onChangeText={val => onChange(val)}
+                      value={value}
+                    />
+                  )}
+                  name="fieldName"
+                  rules={{required: 'Field is required', minLength: 3}}
+                  defaultValue=""
+                />
+                <FormControl.ErrorMessage>
+                  {errors.fieldName?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
+
+              <FormControl isRequired isInvalid={'ownerName' in errors}>
+                <FormControl.Label>Όνομα Ιδιοκτήτη</FormControl.Label>
+                <Controller
+                  control={control}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <Input
+                      onBlur={onBlur}
+                      placeholder="Όνομα Ιδιοκτήτη"
+                      onChangeText={val => onChange(val)}
+                      value={value}
+                    />
+                  )}
+                  name="ownerName"
+                  rules={{required: 'Field is required', minLength: 3}}
+                  defaultValue=""
+                />
+                <FormControl.ErrorMessage>
+                  {errors.ownerName?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={'notes' in errors}>
+                <FormControl.Label>Σημειώσεις</FormControl.Label>
+                <Controller
+                  control={control}
+                  render={({field: {onChange, value}}) => (
+                    <TextArea
+                      autoCompleteType={true}
+                      placeholder="Σημειώσεις/Οδηγίες"
+                      onChangeText={val => onChange(val)}
+                      defaultValue={value}
+                    />
+                  )}
+                  name="notes"
+                  rules={{minLength: 3}}
+                  defaultValue=""
+                />
+                <FormControl.ErrorMessage>
+                  {errors.notes?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
+              <Button onPress={handleSubmit(onSubmit)} colorScheme="blue">
+                Καταχώρηση
+              </Button>
+            </VStack>
+          </Box>
+        ) : (
+          <Box
+            width="100%"
+            height="100%"
+            pt={5}
+            display="flex"
+            justifyContent="center"
+            alignItems="center">
+            <Text mb={3}>Λήψη συντεταγμένων...</Text>
+            <Spinner size="lg" accessibilityLabel="Loading coordinates" />
+          </Box>
+        )}
       </Box>
-      <Box w="100%" h="400">
-        <MapboxGL.MapView style={{flex: 1}}>
-          <MapboxGL.Camera zoomLevel={13} centerCoordinate={coordinates} />
-          <MapboxGL.PointAnnotation coordinate={coordinates} />
-        </MapboxGL.MapView>
-      </Box>
-    </Box>
+    </TouchableWithoutFeedback>
   );
 };
 
