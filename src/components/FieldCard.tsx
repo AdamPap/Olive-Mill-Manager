@@ -5,6 +5,7 @@ import {
   Heading,
   Icon,
   IconButton,
+  Pressable,
   Text,
 } from 'native-base';
 import React from 'react';
@@ -17,25 +18,41 @@ interface FieldCardProps {
 
 const FieldCard = ({field}: FieldCardProps) => {
   return (
-    <Box bgColor="white" shadow="lg" borderRadius="md" mb={2} p={2}>
-      <Flex flexDirection="row" justifyContent="space-between">
-        <Box w="80%">
-          <Heading size="md">{field.fieldName}</Heading>
-          <Text>{field.ownerName}</Text>
-        </Box>
-        <Flex alignItems="flex-end" justifyContent="center">
-          <IconButton
-            variant="solid"
-            // bgColor="primary.300"
-            icon={<Icon size={5} as={Entypo} name="direction" />}
-            onPress={() => {
-              // TODO: handle google maps open
-              console.log('Directions on google maps');
-            }}
-          />
-        </Flex>
-      </Flex>
-      {/* <Box mt={2}>
+    // TODO: on press open edit screen with a delete button 
+    <Pressable onPress={() => console.log('PRESSED')}>
+      {({isPressed}) => {
+        return (
+          <Box
+            bgColor={isPressed ? 'coolGray.100' : 'white'}
+            shadow="lg"
+            borderRadius="md"
+            mb={2}
+            p={2}
+            style={{
+              transform: [
+                {
+                  scale: isPressed ? 0.96 : 1,
+                },
+              ],
+            }}>
+            <Flex flexDirection="row" justifyContent="space-between">
+              <Box w="80%">
+                <Heading size="md">{field.fieldName}</Heading>
+                <Text>{field.ownerName}</Text>
+              </Box>
+              <Flex alignItems="flex-end" justifyContent="center">
+                <IconButton
+                  variant="solid"
+                  // bgColor="primary.300"
+                  icon={<Icon size={5} as={Entypo} name="direction" />}
+                  onPress={() => {
+                    // TODO: handle google maps open
+                    console.log('Directions on google maps');
+                  }}
+                />
+              </Flex>
+            </Flex>
+            {/* <Box mt={2}>
         <Text>{`[ ${field.lng.toFixed(3)}, ${field.lat.toFixed(3)} ]`}</Text>
       </Box>
 
@@ -44,7 +61,10 @@ const FieldCard = ({field}: FieldCardProps) => {
           {field.notes}
         </Text>
       )} */}
-    </Box>
+          </Box>
+        );
+      }}
+    </Pressable>
   );
 };
 
