@@ -1,16 +1,20 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Box, Button, VStack} from 'native-base';
+import {Button, Icon, VStack} from 'native-base';
 import React from 'react';
+import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RootStackParamList} from '../../App';
+import Layout from '../components/Layout';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({route, navigation}: Props) => {
   return (
-    <Box mt={4} p={4}>
+    <Layout>
       <VStack space={4}>
         <Button
-          colorScheme="coolGray"
+          borderRadius="full"
+          leftIcon={<Icon size={7} as={MCI} name="road-variant" mr={5} />}
+          colorScheme="darkBlue"
           onPress={() => {
             navigation.navigate('AllRoutes');
           }}
@@ -18,18 +22,43 @@ const Home = ({route, navigation}: Props) => {
           Έναρξη Δρομολογίου
         </Button>
         <Button
-          colorScheme="coolGray"
+          borderRadius="full"
+          leftIcon={
+            <Icon
+              alignSelf="flex-start"
+              size={7}
+              as={MCI}
+              name="map-plus"
+              mr={5}
+            />
+          }
+          colorScheme="darkBlue"
           onPress={() => {
             navigation.navigate('CreateRoute');
           }}
           size="lg">
-          Προσθήκη χωραφιού
+          Προσθήκη Xωραφιού
         </Button>
-        <Button colorScheme="coolGray" size="lg">
+        <Button
+          borderRadius="full"
+          leftIcon={
+            <Icon
+              alignSelf="flex-start"
+              size={7}
+              as={MCI}
+              name="clipboard-edit-outline"
+              mr={5}
+            />
+          }
+          colorScheme="darkBlue"
+          // onPress={() => {
+          //   navigation.navigate('CreateRoute');
+          // }}
+          size="lg">
           Διαχείριση Αυλής
         </Button>
       </VStack>
-    </Box>
+    </Layout>
   );
 };
 
