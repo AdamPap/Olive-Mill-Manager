@@ -21,11 +21,42 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const config = {
-  useSystemColorMode: false,
-};
+const customTheme = extendTheme({
+  components: {
+    Heading: {
+      baseStyle: () => {
+        return {
+          color: 'darkBlue.800',
+        };
+      },
+    },
+    Button: {
+      baseStyle: {
+        borderRadius: 'full',
+      },
+    },
+    IconButton: {
+      baseStyle: () => {
+        return {
+          borderRadius: 'full',
+        };
+      },
+    },
+    Input: {
+      baseStyle: () => {
+        return {
+          rounded: 'lg',
+          bg: 'warmGray.300',
+        };
+      },
+    },
+  },
 
-const customTheme = extendTheme(config);
+  config: {
+    useSystemColorMode: false,
+    initialColorMode: 'light',
+  },
+});
 
 const App = () => {
   return (
