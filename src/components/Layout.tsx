@@ -1,4 +1,4 @@
-import {Box} from 'native-base';
+import {Box, useColorModeValue} from 'native-base';
 import React, {ReactNode} from 'react';
 
 interface LayoutProps {
@@ -7,11 +7,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({children}) => {
   return (
-    <>
-      <Box m={4} p={4}>
-        {children}
-      </Box>
-    </>
+    <Box bg="warmGray.200" p={4} minHeight="100%">
+      {children}
+    </Box>
   );
 };
 

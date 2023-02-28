@@ -9,12 +9,15 @@ const ColorModeButton = () => {
     <IconButton
       icon={
         colorMode === 'light' ? (
-          <Icon color="blueGray.900" size={5} as={Feather} name="moon" />
+          <Icon color="darkBlue.800" size={6} as={Feather} name="moon" />
         ) : (
-          <Icon color="yellow.300" size={5} as={Feather} name="sun" />
+          <Icon color="yellow.500" size={6} as={Feather} name="sun" />
         )
       }
-      onPress={toggleColorMode}
+      onPress={() => {
+        console.log(colorMode);
+        toggleColorMode();
+      }}
     />
   );
 };

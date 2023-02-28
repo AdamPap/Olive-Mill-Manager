@@ -18,16 +18,16 @@ interface FieldCardProps {
 
 const FieldCard = ({field}: FieldCardProps) => {
   return (
-    // TODO: on press open edit screen with a delete button 
+    // TODO: on press open edit screen with a delete button
     <Pressable onPress={() => console.log('PRESSED')}>
       {({isPressed}) => {
         return (
           <Box
-            bgColor={isPressed ? 'coolGray.100' : 'white'}
+            bgColor={isPressed ? 'coolGray.100' : 'warmGray.300'}
             shadow="lg"
             borderRadius="md"
             mb={2}
-            p={2}
+            p={3}
             style={{
               transform: [
                 {
@@ -42,9 +42,16 @@ const FieldCard = ({field}: FieldCardProps) => {
               </Box>
               <Flex alignItems="flex-end" justifyContent="center">
                 <IconButton
-                  variant="solid"
-                  // bgColor="primary.300"
-                  icon={<Icon size={5} as={Entypo} name="direction" />}
+                  bg="darkBlue.800"
+                  _pressed={{bg: 'darkBlue.900'}}
+                  icon={
+                    <Icon
+                      color="warmGray.200"
+                      size={5}
+                      as={Entypo}
+                      name="direction"
+                    />
+                  }
                   onPress={() => {
                     // TODO: handle google maps open
                     console.log('Directions on google maps');
