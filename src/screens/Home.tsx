@@ -12,9 +12,9 @@ const Home = ({route, navigation}: Props) => {
     <Layout>
       <VStack space={4}>
         <Button
-          borderRadius="full"
+          bg="darkBlue.800"
+          _pressed={{bg: 'darkBlue.900'}}
           leftIcon={<Icon size={7} as={MCI} name="road-variant" mr={5} />}
-          colorScheme="darkBlue"
           onPress={() => {
             navigation.navigate('AllRoutes');
           }}
@@ -22,7 +22,8 @@ const Home = ({route, navigation}: Props) => {
           Έναρξη Δρομολογίου
         </Button>
         <Button
-          borderRadius="full"
+          bg="darkBlue.800"
+          _pressed={{bg: 'darkBlue.900'}}
           leftIcon={
             <Icon
               alignSelf="flex-start"
@@ -32,7 +33,6 @@ const Home = ({route, navigation}: Props) => {
               mr={5}
             />
           }
-          colorScheme="darkBlue"
           onPress={() => {
             navigation.navigate('CreateRoute');
           }}
@@ -40,7 +40,8 @@ const Home = ({route, navigation}: Props) => {
           Προσθήκη Xωραφιού
         </Button>
         <Button
-          borderRadius="full"
+          bg="darkBlue.800"
+          _pressed={{bg: 'darkBlue.900'}}
           leftIcon={
             <Icon
               alignSelf="flex-start"
@@ -50,7 +51,6 @@ const Home = ({route, navigation}: Props) => {
               mr={5}
             />
           }
-          colorScheme="darkBlue"
           // onPress={() => {
           //   navigation.navigate('CreateRoute');
           // }}
