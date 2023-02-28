@@ -10,6 +10,7 @@ import {
   Spinner,
   Text,
   TextArea,
+  useColorModeValue,
   VStack,
 } from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
@@ -25,6 +26,7 @@ import {
 } from 'react-native';
 import Geolocation, {GeoPosition} from 'react-native-geolocation-service';
 import {RootStackParamList} from '../../App';
+import Layout from '../components/Layout';
 
 import {RealmContext} from '../models';
 import {Field} from '../models/Field';
@@ -136,98 +138,115 @@ const CreateRoute = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Box>
-        {!isLoading && location ? (
-          <Box bg="white" borderRadius="md" shadow="2" m={4} p={3}>
-            <Box>
-              <Heading mt={2} size="md" textAlign="center">
-                {`[ ${location?.coords.longitude}, ${location?.coords.latitude} ]`}
-              </Heading>
+    <Layout>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Box>
+          {!isLoading && location ? (
+            <Box m={4}>
+              <Box>
+                <Heading mt={2} size="md" textAlign="center">
+                  {`[ ${location?.coords.longitude.toFixed(
+                    4,
+                  )}, ${location?.coords.latitude.toFixed(4)} ]`}
+                </Heading>
+              </Box>
+
+              <VStack mt={4} space={3}>
+                <FormControl isRequired isInvalid={'fieldName' in errors}>
+                  <FormControl.Label _text={{color: 'darkBlue.800'}}>
+                    Όνομα Χωραφιού
+                  </FormControl.Label>
+                  <Controller
+                    control={control}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <Input
+                        onBlur={onBlur}
+                        placeholder="Όνομα Χωραφιού"
+                        onChangeText={val => onChange(val)}
+                        value={value}
+                      />
+                    )}
+                    name="fieldName"
+                    rules={{required: 'Field is required', minLength: 3}}
+                    defaultValue=""
+                  />
+                  <FormControl.ErrorMessage>
+                    {errors.fieldName?.message}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+
+                <FormControl isRequired isInvalid={'ownerName' in errors}>
+                  <FormControl.Label _text={{color: 'darkBlue.800'}}>
+                    Όνομα Ιδιοκτήτη
+                  </FormControl.Label>
+                  <Controller
+                    control={control}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <Input
+                        rounded="lg"
+                        bg="warmGray.300"
+                        onBlur={onBlur}
+                        placeholder="Όνομα Ιδιοκτήτη"
+                        onChangeText={val => onChange(val)}
+                        value={value}
+                      />
+                    )}
+                    name="ownerName"
+                    rules={{required: 'Field is required', minLength: 3}}
+                    defaultValue=""
+                  />
+                  <FormControl.ErrorMessage>
+                    {errors.ownerName?.message}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+
+                <FormControl isInvalid={'notes' in errors}>
+                  <FormControl.Label _text={{color: 'darkBlue.800'}}>
+                    Σημειώσεις
+                  </FormControl.Label>
+                  <Controller
+                    control={control}
+                    render={({field: {onChange, value}}) => (
+                      <TextArea
+                        rounded="lg"
+                        bg="warmGray.300"
+                        autoCompleteType={true}
+                        placeholder="Σημειώσεις/Οδηγίες"
+                        onChangeText={val => onChange(val)}
+                        defaultValue={value}
+                      />
+                    )}
+                    name="notes"
+                    rules={{minLength: 3}}
+                    defaultValue=""
+                  />
+                  <FormControl.ErrorMessage>
+                    {errors.notes?.message}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+                <Button
+                  bg="darkBlue.800"
+                  _pressed={{bg: 'darkBlue.900'}}
+                  onPress={handleSubmit(onSubmit)}>
+                  Καταχώρηση
+                </Button>
+              </VStack>
             </Box>
-
-            <VStack mt={4} space={3}>
-              <FormControl isRequired isInvalid={'fieldName' in errors}>
-                <FormControl.Label>Όνομα Χωραφιού</FormControl.Label>
-                <Controller
-                  control={control}
-                  render={({field: {onChange, onBlur, value}}) => (
-                    <Input
-                      onBlur={onBlur}
-                      placeholder="Όνομα Χωραφιού"
-                      onChangeText={val => onChange(val)}
-                      value={value}
-                    />
-                  )}
-                  name="fieldName"
-                  rules={{required: 'Field is required', minLength: 3}}
-                  defaultValue=""
-                />
-                <FormControl.ErrorMessage>
-                  {errors.fieldName?.message}
-                </FormControl.ErrorMessage>
-              </FormControl>
-
-              <FormControl isRequired isInvalid={'ownerName' in errors}>
-                <FormControl.Label>Όνομα Ιδιοκτήτη</FormControl.Label>
-                <Controller
-                  control={control}
-                  render={({field: {onChange, onBlur, value}}) => (
-                    <Input
-                      onBlur={onBlur}
-                      placeholder="Όνομα Ιδιοκτήτη"
-                      onChangeText={val => onChange(val)}
-                      value={value}
-                    />
-                  )}
-                  name="ownerName"
-                  rules={{required: 'Field is required', minLength: 3}}
-                  defaultValue=""
-                />
-                <FormControl.ErrorMessage>
-                  {errors.ownerName?.message}
-                </FormControl.ErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={'notes' in errors}>
-                <FormControl.Label>Σημειώσεις</FormControl.Label>
-                <Controller
-                  control={control}
-                  render={({field: {onChange, value}}) => (
-                    <TextArea
-                      autoCompleteType={true}
-                      placeholder="Σημειώσεις/Οδηγίες"
-                      onChangeText={val => onChange(val)}
-                      defaultValue={value}
-                    />
-                  )}
-                  name="notes"
-                  rules={{minLength: 3}}
-                  defaultValue=""
-                />
-                <FormControl.ErrorMessage>
-                  {errors.notes?.message}
-                </FormControl.ErrorMessage>
-              </FormControl>
-              <Button onPress={handleSubmit(onSubmit)} colorScheme="blue">
-                Καταχώρηση
-              </Button>
-            </VStack>
-          </Box>
-        ) : (
-          <Box
-            width="100%"
-            height="100%"
-            pt={5}
-            display="flex"
-            justifyContent="center"
-            alignItems="center">
-            <Text mb={3}>Λήψη συντεταγμένων...</Text>
-            <Spinner size="lg" accessibilityLabel="Loading coordinates" />
-          </Box>
-        )}
-      </Box>
-    </TouchableWithoutFeedback>
+          ) : (
+            <Box
+              width="100%"
+              height="100%"
+              pt={5}
+              display="flex"
+              justifyContent="center"
+              alignItems="center">
+              <Text mb={3}>Λήψη συντεταγμένων...</Text>
+              <Spinner size="lg" accessibilityLabel="Loading coordinates" />
+            </Box>
+          )}
+        </Box>
+      </TouchableWithoutFeedback>
+    </Layout>
   );
 };
 
