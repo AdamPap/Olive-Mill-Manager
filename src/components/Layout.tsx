@@ -1,4 +1,4 @@
-import {Box, useColorModeValue} from 'native-base';
+import {Box} from 'native-base';
 import React, {ReactNode} from 'react';
 
 interface LayoutProps {
