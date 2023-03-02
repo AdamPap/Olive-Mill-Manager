@@ -25,6 +25,7 @@ const titles: TitleInterface = {
   AllRoutes: 'All Routes',
   CreateRoute: 'Create Route',
   Profile: 'Profile',
+  YardManagement: 'Yard Management',
 };
 
 const AppBar: React.FC<AppBarProps> = ({navigation, back, title}) => {
