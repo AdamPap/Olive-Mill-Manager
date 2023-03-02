@@ -1,8 +1,7 @@
 import {createRealmContext} from '@realm/react';
 import {Field} from './Field';
+import {Place} from './Place';
 
-const config = {
-  schema: [Field],
-};
-
-export const RealmContext = createRealmContext(config);
+export const RealmContext = createRealmContext({
+  schema: [Field, Place],
+});
