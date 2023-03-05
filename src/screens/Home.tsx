@@ -51,9 +51,9 @@ const Home = ({route, navigation}: Props) => {
               mr={5}
             />
           }
-          // onPress={() => {
-          //   navigation.navigate('CreateRoute');
-          // }}
+          onPress={() => {
+            navigation.navigate('YardManagement');
+          }}
           size="lg">
           Διαχείριση Αυλής
         </Button>
