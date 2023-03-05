@@ -1,3 +1,8 @@
+import {useNavigation} from '@react-navigation/native';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {
   ArrowForwardIcon,
   Box,
@@ -10,23 +15,35 @@ import {
 } from 'native-base';
 import React from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {RootStackParamList} from '../../App';
 import {Field} from '../models/Field';
 
 interface FieldCardProps {
   field: Field;
 }
 
+// The type is needed to annotate useNavigation and
+// it's different from NativeStackScreenProps
+export type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'EditField'
+>;
+
 const FieldCard = ({field}: FieldCardProps) => {
+  const navigation = useNavigation<NavigationProp>();
+
   return (
-    // TODO: on press open edit screen with a delete button
-    <Pressable onPress={() => console.log('PRESSED')}>
+    <Pressable
+      onPress={() => {
+        navigation.navigate('EditField', {fieldId: field.id});
+      }}>
       {({isPressed}) => {
         return (
           <Box
-            bgColor={isPressed ? 'coolGray.100' : 'warmGray.300'}
-            shadow="lg"
+            bgColor={isPressed ? 'warmGray.400' : 'warmGray.300'}
             borderRadius="md"
             mb={2}
+            mr={2}
             p={3}
             style={{
               transform: [
