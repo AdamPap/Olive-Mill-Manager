@@ -11,6 +11,7 @@ import {
   Text,
   TextArea,
   useColorModeValue,
+  useToast,
   VStack,
 } from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
@@ -26,6 +27,7 @@ import {
 } from 'react-native';
 import Geolocation, {GeoPosition} from 'react-native-geolocation-service';
 import {RootStackParamList} from '../../App';
+import CustomAlert from '../components/Alert';
 import Layout from '../components/Layout';
 
 import {RealmContext} from '../models';
@@ -34,9 +36,13 @@ const {useRealm, useQuery} = RealmContext;
 
 type FormValues = {fieldName: string; ownerName: string; notes: string};
 
-const CreateRoute = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'CreateRoute'>;
+
+const CreateRoute = ({navigation}: Props) => {
   const [location, setLocation] = useState<GeoPosition | null>();
   const [isLoading, setIsLoading] = useState(true);
+
+  const toast = useToast();
 
   const realm = useRealm();
 
@@ -115,8 +121,8 @@ const CreateRoute = () => {
           Field.generate(
             fieldName,
             ownerName,
-            location!.coords.longitude,
-            location!.coords.latitude,
+            parseFloat(location!.coords.longitude.toFixed(6)),
+            parseFloat(location!.coords.latitude.toFixed(6)),
             notes,
           ),
         );
@@ -133,8 +139,15 @@ const CreateRoute = () => {
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = data => {
-    console.log('submiting with ', data);
+    console.log('submitting with ', data);
     addField(data);
+    toast.show({
+      duration: 2500,
+      render: () => {
+        return <CustomAlert>Επιτυχής καταχώρηση Χωραφιού</CustomAlert>;
+      },
+    });
+    navigation.navigate('AllRoutes');
   };
 
   return (
@@ -225,6 +238,7 @@ const CreateRoute = () => {
                   </FormControl.ErrorMessage>
                 </FormControl>
                 <Button
+                  mt={3}
                   bg="darkBlue.800"
                   _pressed={{bg: 'darkBlue.900'}}
                   onPress={handleSubmit(onSubmit)}>
