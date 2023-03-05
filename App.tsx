@@ -10,6 +10,10 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import AppBar from './src/components/AppBar';
 import {RealmContext} from './src/models';
 import AllRoutes from './src/screens/AllRoutes';
+import YardManagement from './src/screens/YardManagement';
+import EditField from './src/screens/EditField';
+import {Field} from './src/models/Field';
+import {BSON} from 'realm';
 const {RealmProvider} = RealmContext;
 
 export type RootStackParamList = {
@@ -17,6 +21,8 @@ export type RootStackParamList = {
   AllRoutes: undefined;
   CreateRoute: undefined;
   Profile: undefined;
+  YardManagement: undefined;
+  EditField: {fieldId: BSON.ObjectId};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -71,6 +77,8 @@ const App = () => {
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="CreateRoute" component={CreateRoute} />
             <Stack.Screen name="AllRoutes" component={AllRoutes} />
+            <Stack.Screen name="YardManagement" component={YardManagement} />
+            <Stack.Screen name="EditField" component={EditField} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
           </Stack.Navigator>
         </NavigationContainer>
