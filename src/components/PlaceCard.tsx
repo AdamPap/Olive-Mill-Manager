@@ -39,14 +39,16 @@ const PlaceCard = ({place}: PlaceCardProps) => {
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center">
-              <Box mr={3}>
+              <Box mr={5}>
                 <Text color="darkBlue.800" fontWeight="bold" fontSize="3xl">
                   {place.placeNumber}
                 </Text>
               </Box>
               <Box flexGrow={2}>
-                <Heading size="md">{place.ownerName}</Heading>
-                <Text>{place.ownerName}</Text>
+                <Heading size="md">
+                  {place.ownerName ? place.ownerName : '-'}
+                </Heading>
+                <Text>Τσουβάλια: {place.numberOfBags}</Text>
               </Box>
               <Flex alignItems="flex-end" justifyContent="center">
                 <IconButton
