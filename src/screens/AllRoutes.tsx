@@ -5,10 +5,10 @@ import {FlatList, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {RootStackParamList} from '../../App';
 import FieldCard from '../components/FieldCard';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Layout from '../components/Layout';
 
 import {RealmContext} from '../models';
 import {Field} from '../models/Field';
-import Layout from '../components/Layout';
 const {useRealm, useQuery} = RealmContext;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AllRoutes'>;
@@ -23,12 +23,13 @@ const AllRoutes = ({route, navigation}: Props) => {
   return (
     <Layout>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Box p={4}>
+        <Box p={4} flex={1}>
           <Box mb={4}>
             <Heading mb={2} size="md">
               Aναζήτηση
             </Heading>
             <Input
+              fontSize="sm"
               value={inputValue}
               onChangeText={handleChange}
               variant="outline"
@@ -46,7 +47,10 @@ const AllRoutes = ({route, navigation}: Props) => {
 
           <Divider />
 
-          <Box mt={3}>
+          {/* TODO: check flatlist bug where last elements not showing unless
+            flex={1} in all flatlsit parent View containers and padding on bottom
+          */}
+          <Box mt={3} flex={1}>
             <FlatList
               data={fields.filter(
                 field =>
@@ -58,6 +62,7 @@ const AllRoutes = ({route, navigation}: Props) => {
                     .includes(inputValue.toLowerCase()),
               )}
               keyExtractor={field => field.id.toString()}
+              contentContainerStyle={{paddingBottom: 40}}
               renderItem={({item}) => <FieldCard field={item} />}
             />
           </Box>
