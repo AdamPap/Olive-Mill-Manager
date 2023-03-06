@@ -24,7 +24,7 @@ const YardManagement = () => {
       console.log('Writing new data');
       realm.write(() => {
         for (let i = 0; i < 10; i++) {
-          realm.create('Place', Place.generate(i + 1, 'test', 0));
+          realm.create('Place', Place.generate(i + 1, '', 0));
         }
       });
 
