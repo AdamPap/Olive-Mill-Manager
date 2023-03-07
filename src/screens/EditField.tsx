@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {BSON} from 'realm';
 import {RootStackParamList} from '../../App';
 import CustomAlert from '../components/Alert';
 import Layout from '../components/Layout';
@@ -32,14 +33,19 @@ type FormValues = {
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditField'>;
 
+// TODO: add loading
 const EditField = ({route, navigation}: Props) => {
   const {fieldId} = route.params;
 
   const realm = useRealm();
 
   // Type casting is required to properly type the result
-  const field = realm.objectForPrimaryKey<Field>('Field', fieldId) as Field &
-    Realm.Object<Field>;
+
+  const field = realm.objectForPrimaryKey<Field>(
+    'Field',
+    // Convert string fieldId back to ObjectId
+    BSON.ObjectId.createFromHexString(fieldId),
+  ) as Field & Realm.Object<Field>;
 
   const toast = useToast();
 

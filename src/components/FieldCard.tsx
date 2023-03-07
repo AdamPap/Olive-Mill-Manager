@@ -35,7 +35,10 @@ const FieldCard = ({field}: FieldCardProps) => {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate('EditField', {fieldId: field.id});
+        // Convert ObjectId to string so that it can be passed in
+        // React Navigation route params, since it accepts basic types
+        // instead of objects (shows warning)
+        navigation.navigate('EditField', {fieldId: field.id.toHexString()});
       }}>
       {({isPressed}) => {
         return (
