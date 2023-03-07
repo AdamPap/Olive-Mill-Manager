@@ -8,7 +8,7 @@ import {
   Pressable,
   Text,
 } from 'native-base';
-import React from 'react';
+import React, {memo} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Place} from '../models/Place';
 
@@ -17,9 +17,13 @@ interface PlaceCardProps {
 }
 
 const PlaceCard = ({place}: PlaceCardProps) => {
+  const handlePress = () => {
+    console.log('PRESSED');
+  };
+
   return (
     // TODO: on press open edit screen with a delete button
-    <Pressable onPress={() => console.log('PRESSED')}>
+    <Pressable onPress={handlePress}>
       {({isPressed}) => {
         return (
           <Box
@@ -62,10 +66,13 @@ const PlaceCard = ({place}: PlaceCardProps) => {
                       name="edit"
                     />
                   }
-                  onPress={() => {
-                    // TODO: handle google maps open
-                    console.log('Directions on google maps');
-                  }}
+                  onPress={
+                    //   () => {
+                    //   // TODO: handle google maps open
+                    //   console.log('Directions on google maps');
+                    // }
+                    handlePress
+                  }
                 />
               </Flex>
             </Flex>
@@ -76,4 +83,4 @@ const PlaceCard = ({place}: PlaceCardProps) => {
   );
 };
 
-export default PlaceCard;
+export default memo(PlaceCard);
