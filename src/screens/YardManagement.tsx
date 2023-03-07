@@ -23,7 +23,7 @@ const YardManagement = () => {
     } else {
       console.log('Writing new data');
       realm.write(() => {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
           realm.create('Place', Place.generate(i + 1, '', 0));
         }
       });
@@ -35,6 +35,19 @@ const YardManagement = () => {
   const places = useQuery(Place);
 
   const handleChange = (text: string) => setInputValue(text);
+
+  const renderItem = ({item}: {item: Place}) => <PlaceCard place={item} />;
+
+  const keyExtractor = (place: Place) => place.id.toString();
+
+  const ITEM_HEIGHT = 65; // fixed height of item component
+  const getItemLayout = (_: any, index: number) => {
+    return {
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    };
+  };
 
   return (
     <Layout>
@@ -65,6 +78,7 @@ const YardManagement = () => {
             <Divider />
 
             <Box flex={1} mt={3}>
+              {/* TODO: swap flatlist with flash-list or recyclerlistview */}
               <FlatList
                 data={places.filter(
                   place =>
@@ -75,14 +89,17 @@ const YardManagement = () => {
                       .toLowerCase()
                       .includes(inputValue.toLowerCase()),
                 )}
+                initialNumToRender={5}
+                maxToRenderPerBatch={5}
                 contentContainerStyle={{paddingBottom: 40}}
-                keyExtractor={place => place.id.toString()}
-                renderItem={({item}) => <PlaceCard place={item} />}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                getItemLayout={getItemLayout}
               />
             </Box>
           </Box>
         ) : (
-          <Box>Loading</Box>
+          <Box>Loading ...</Box>
         )}
       </TouchableWithoutFeedback>
     </Layout>
