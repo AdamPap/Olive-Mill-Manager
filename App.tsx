@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {extendTheme, NativeBaseProvider} from 'native-base';
@@ -22,7 +23,7 @@ export type RootStackParamList = {
   CreateRoute: undefined;
   Profile: undefined;
   YardManagement: undefined;
-  EditField: {fieldId: BSON.ObjectId};
+  EditField: {fieldId: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
