@@ -1,10 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import {
-  ArrowForwardIcon,
   Box,
   Flex,
   Heading,
@@ -79,15 +75,6 @@ const FieldCard = ({field}: FieldCardProps) => {
                 />
               </Flex>
             </Flex>
-            {/* <Box mt={2}>
-        <Text>{`[ ${field.lng.toFixed(3)}, ${field.lat.toFixed(3)} ]`}</Text>
-      </Box>
-
-      {field.notes && field.notes.length > 0 && (
-        <Text bg="red.300" mt={2}>
-          {field.notes}
-        </Text>
-      )} */}
           </Box>
         );
       }}
