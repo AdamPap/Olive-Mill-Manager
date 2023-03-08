@@ -8,21 +8,23 @@ import {
   Pressable,
   Text,
 } from 'native-base';
-import React, {memo} from 'react';
+import React, {memo, useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Place} from '../models/Place';
+import PlaceEditModal from './modals/PlaceEditModal';
 
 interface PlaceCardProps {
   place: Place;
 }
 
 const PlaceCard = ({place}: PlaceCardProps) => {
+  const [showModal, setShowModal] = useState(false);
+
   const handlePress = () => {
-    console.log('PRESSED');
+    setShowModal(true);
   };
 
   return (
-    // TODO: on press open edit screen with a delete button
     <Pressable onPress={handlePress}>
       {({isPressed}) => {
         return (
@@ -44,7 +46,10 @@ const PlaceCard = ({place}: PlaceCardProps) => {
               justifyContent="space-between"
               alignItems="center">
               <Box mr={5}>
-                <Text color="darkBlue.800" fontWeight="bold" fontSize="3xl">
+                <Text
+                  color={place.ownerName ? 'darkBlue.800' : 'warmGray.600'}
+                  fontWeight="bold"
+                  fontSize="3xl">
                   {place.placeNumber}
                 </Text>
               </Box>
@@ -55,6 +60,14 @@ const PlaceCard = ({place}: PlaceCardProps) => {
                 <Text>Τσουβάλια: {place.numberOfBags}</Text>
               </Box>
               <Flex alignItems="flex-end" justifyContent="center">
+                <Text color="warmGray.500" fontSize="xs">
+                  {place.updatedAt.toLocaleDateString('el-GR')}
+                </Text>
+                <Text color="warmGray.500" fontSize="xs">
+                  {place.updatedAt.toLocaleTimeString('el-GR', {hour12: false})}
+                </Text>
+              </Flex>
+              {/* <Flex alignItems="flex-end" justifyContent="center">
                 <IconButton
                   bg="emerald.600"
                   _pressed={{bg: 'darkBlue.900'}}
@@ -66,16 +79,15 @@ const PlaceCard = ({place}: PlaceCardProps) => {
                       name="edit"
                     />
                   }
-                  onPress={
-                    //   () => {
-                    //   // TODO: handle google maps open
-                    //   console.log('Directions on google maps');
-                    // }
-                    handlePress
-                  }
+                  onPress={handlePress}
                 />
-              </Flex>
+              </Flex> */}
             </Flex>
+            <PlaceEditModal
+              place={place}
+              showModal={showModal}
+              setShowModal={setShowModal}
+            />
           </Box>
         );
       }}
