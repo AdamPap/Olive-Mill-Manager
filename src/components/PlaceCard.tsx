@@ -29,7 +29,7 @@ const PlaceCard = ({place}: PlaceCardProps) => {
       {({isPressed}) => {
         return (
           <Box
-            bgColor={isPressed ? 'warmGray.400' : 'warmGray.300'}
+            bgColor={isPressed ? 'emerald.500' : 'warmGray.300'}
             borderRadius="md"
             mb={2}
             mr={2}
