@@ -13,8 +13,6 @@ import {RealmContext} from './src/models';
 import AllRoutes from './src/screens/AllRoutes';
 import YardManagement from './src/screens/YardManagement';
 import EditField from './src/screens/EditField';
-import {Field} from './src/models/Field';
-import {BSON} from 'realm';
 const {RealmProvider} = RealmContext;
 
 export type RootStackParamList = {
