@@ -45,6 +45,7 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
       realm.write(() => {
         place.ownerName = ownerName;
         place.numberOfBags = parseInt(numberOfBags);
+        place.updatedAt = new Date();
       });
       console.log('Updated Place: ', place.placeNumber);
     } catch (err) {
