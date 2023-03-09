@@ -66,7 +66,7 @@ const YardManagement = () => {
 
             <Divider />
 
-            <Box flex={1} mt={3}>
+            <Box flex={1} mt={3} pb={10}>
               <FlashList
                 data={places.filter(
                   place =>
