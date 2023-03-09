@@ -1,17 +1,20 @@
 import {
   Button,
   Center,
-  Flex,
+  Divider,
   FormControl,
+  HStack,
   Input,
+  Link,
   Modal,
+  Text,
   useToast,
   VStack,
 } from 'native-base';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {RealmContext} from '../../models';
 import {Place} from '../../models/Place';
 import CustomAlert from '../Alert';
-import {RealmContext} from '../../models';
 const {useRealm} = RealmContext;
 
 interface Props {
@@ -73,9 +76,31 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
   return (
     <Center>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <Modal.Content maxWidth="400px">
+        <Modal.Content maxWidth="400px" bg="warmGray.200">
           <Modal.CloseButton />
-          <Modal.Header>{`Επεξεργασία Θέσης ${place.placeNumber}`}</Modal.Header>
+          <Modal.Header bg="warmGray.200">
+            <HStack alignItems="center">
+              <Text
+                fontSize="lg"
+                color="darkBlue.800"
+                fontWeight="bold">{`Θέση ${place.placeNumber}`}</Text>
+              <Divider
+                bg="warmGray.300"
+                thickness="1"
+                mx="3"
+                orientation="vertical"
+              />
+              <Link
+                colorScheme="emerald"
+                onPress={() => {
+                  setShowModal(false);
+                }}>
+                <Text color="darkBlue.800" fontSize="sm" underline>
+                  Ιστορικό
+                </Text>
+              </Link>
+            </HStack>
+          </Modal.Header>
           <Modal.Body>
             <VStack space={3}>
               <FormControl isRequired isInvalid={'ownerName' in errors}>
@@ -128,17 +153,18 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
               </FormControl>
             </VStack>
           </Modal.Body>
-          <Modal.Footer>
-            <Button.Group space={2}>
+          <Modal.Footer bg="warmGray.200">
+            <Button.Group w="100%" justifyContent="space-between">
               <Button
-                variant="outline"
-                colorScheme="green"
+                borderRadius="md"
+                colorScheme="red"
                 onPress={() => {
                   setShowModal(false);
                 }}>
-                Ιστορικό
+                Καθαρισμός
               </Button>
               <Button
+                borderRadius="md"
                 bg="darkBlue.800"
                 _pressed={{bg: 'darkBlue.900'}}
                 onPress={handleSubmit(onSubmit)}>
