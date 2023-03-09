@@ -1,16 +1,7 @@
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import {
-  Box,
-  Heading,
-  HStack,
-  Icon,
-  IconButton,
-  StatusBar,
-  useColorModeValue,
-} from 'native-base';
+import {Box, Heading, HStack, Icon, IconButton, StatusBar} from 'native-base';
 import React from 'react';
 import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import ColorModeButton from './ColorModeButton';
 
 type AppBarProps = NativeStackHeaderProps & {title: string};
 
