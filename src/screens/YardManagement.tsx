@@ -1,8 +1,8 @@
-import {Box, Heading, Input, Icon, Divider} from 'native-base';
+import {FlashList} from '@shopify/flash-list';
+import {Box, Divider, Flex, Heading, Icon, Input} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import {TouchableWithoutFeedback, Keyboard, FlatList} from 'react-native';
+import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FieldCard from '../components/FieldCard';
 import Layout from '../components/Layout';
 import PlaceCard from '../components/PlaceCard';
 
@@ -38,17 +38,6 @@ const YardManagement = () => {
 
   const renderItem = ({item}: {item: Place}) => <PlaceCard place={item} />;
 
-  const keyExtractor = (place: Place) => place.id.toString();
-
-  const ITEM_HEIGHT = 65; // fixed height of item component
-  const getItemLayout = (_: any, index: number) => {
-    return {
-      length: ITEM_HEIGHT,
-      offset: ITEM_HEIGHT * index,
-      index,
-    };
-  };
-
   return (
     <Layout>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -78,8 +67,7 @@ const YardManagement = () => {
             <Divider />
 
             <Box flex={1} mt={3}>
-              {/* TODO: swap flatlist with flash-list or recyclerlistview */}
-              <FlatList
+              <FlashList
                 data={places.filter(
                   place =>
                     place.placeNumber
@@ -89,12 +77,9 @@ const YardManagement = () => {
                       .toLowerCase()
                       .includes(inputValue.toLowerCase()),
                 )}
-                initialNumToRender={5}
-                maxToRenderPerBatch={5}
-                contentContainerStyle={{paddingBottom: 40}}
-                keyExtractor={keyExtractor}
                 renderItem={renderItem}
-                getItemLayout={getItemLayout}
+                estimatedItemSize={100}
+                ListEmptyComponent={<Flex>List is Empty</Flex>}
               />
             </Box>
           </Box>
