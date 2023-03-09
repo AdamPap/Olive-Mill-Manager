@@ -62,7 +62,9 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
     toast.show({
       duration: 2500,
       render: () => {
-        return <CustomAlert>Επιτυχής Επεξεργασία Θέσης</CustomAlert>;
+        return (
+          <CustomAlert>{`Επιτυχής Επεξεργασία Θέσης ${place.placeNumber}`}</CustomAlert>
+        );
       },
     });
   };
@@ -72,7 +74,7 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          <Modal.Header>Επεξεργασία Θέσης</Modal.Header>
+          <Modal.Header>{`Επεξεργασία Θέσης ${place.placeNumber}`}</Modal.Header>
           <Modal.Body>
             <VStack space={3}>
               <FormControl isRequired isInvalid={'ownerName' in errors}>
@@ -128,12 +130,12 @@ const PlaceEditModal: React.FC<Props> = ({place, showModal, setShowModal}) => {
           <Modal.Footer>
             <Button.Group space={2}>
               <Button
-                variant="ghost"
-                colorScheme="red"
+                variant="outline"
+                colorScheme="green"
                 onPress={() => {
                   setShowModal(false);
                 }}>
-                Ακύρωση
+                Ιστορικό
               </Button>
               <Button
                 bg="darkBlue.800"
