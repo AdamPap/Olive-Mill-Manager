@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Button, Icon, VStack} from 'native-base';
+import {Button, Icon, Pressable, Text, VStack} from 'native-base';
 import React from 'react';
 import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RootStackParamList} from '../../App';
@@ -11,52 +11,86 @@ const Home = ({route, navigation}: Props) => {
   return (
     <Layout>
       <VStack space={4}>
-        <Button
+        <Pressable
           bg="darkBlue.800"
+          rounded="full"
+          py={3}
+          px={10}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
           _pressed={{bg: 'darkBlue.900'}}
-          leftIcon={<Icon size={7} as={MCI} name="road-variant" mr={5} />}
           onPress={() => {
             navigation.navigate('AllRoutes');
-          }}
-          size="lg">
-          Έναρξη Δρομολογίου
-        </Button>
-        <Button
+          }}>
+          <Icon mr={6} color="white" size={8} as={MCI} name="road-variant" />
+          <Text flex="1" textAlign="center" fontSize="md" color="white">
+            Έναρξη Δρομολογίου
+          </Text>
+        </Pressable>
+        <Pressable
           bg="darkBlue.800"
+          rounded="full"
+          py={3}
+          px={10}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
           _pressed={{bg: 'darkBlue.900'}}
-          leftIcon={
-            <Icon
-              alignSelf="flex-start"
-              size={7}
-              as={MCI}
-              name="map-plus"
-              mr={5}
-            />
-          }
           onPress={() => {
             navigation.navigate('CreateRoute');
-          }}
-          size="lg">
-          Προσθήκη Xωραφιού
-        </Button>
-        <Button
+          }}>
+          <Icon mr={6} color="white" size={8} as={MCI} name="map-plus" />
+          <Text flex="1" textAlign="center" fontSize="md" color="white">
+            Προσθήκη Xωραφιού
+          </Text>
+        </Pressable>
+        <Pressable
           bg="darkBlue.800"
+          rounded="full"
+          py={3}
+          px={10}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
           _pressed={{bg: 'darkBlue.900'}}
-          leftIcon={
-            <Icon
-              alignSelf="flex-start"
-              size={7}
-              as={MCI}
-              name="clipboard-edit-outline"
-              mr={5}
-            />
-          }
           onPress={() => {
             navigation.navigate('YardManagement');
-          }}
-          size="lg">
-          Διαχείριση Αυλής
-        </Button>
+          }}>
+          <Icon
+            mr={6}
+            color="white"
+            size={8}
+            as={MCI}
+            name="clipboard-edit-outline"
+          />
+          <Text flex="1" textAlign="center" fontSize="md" color="white">
+            Διαχείριση Αυλής
+          </Text>
+        </Pressable>
+        {/* <Pressable
+          bg="darkBlue.800"
+          rounded="full"
+          py={3}
+          px={10}
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          _pressed={{bg: 'darkBlue.900'}}
+          onPress={() => {
+            navigation.navigate('YardManagement');
+          }}>
+          <Icon
+            mr={6}
+            color="white"
+            size={8}
+            as={MCI}
+            name="calendar-clock-outline"
+          />
+          <Text flex="1" textAlign="center" fontSize="md" color="white">
+            Πρόγραμμα Αλεσμάτων
+          </Text>
+        </Pressable> */}
       </VStack>
     </Layout>
   );
