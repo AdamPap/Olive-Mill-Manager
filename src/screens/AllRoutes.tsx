@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Box, Button, Divider, Heading, Icon, Input} from 'native-base';
+import {Box, Button, Divider, Flex, Heading, Icon, Input} from 'native-base';
 import React, {useState} from 'react';
 import {FlatList, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {RootStackParamList} from '../../App';
@@ -9,6 +9,7 @@ import Layout from '../components/Layout';
 
 import {RealmContext} from '../models';
 import {Field} from '../models/Field';
+import {FlashList} from '@shopify/flash-list';
 const {useRealm, useQuery} = RealmContext;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AllRoutes'>;
@@ -19,6 +20,8 @@ const AllRoutes = ({route, navigation}: Props) => {
   const fields = useQuery(Field);
 
   const handleChange = (text: string) => setInputValue(text);
+
+  const renderItem = ({item}: {item: Field}) => <FieldCard field={item} />;
 
   return (
     <Layout>
@@ -47,23 +50,20 @@ const AllRoutes = ({route, navigation}: Props) => {
 
           <Divider />
 
-          {/* TODO: check flatlist bug where last elements not showing unless
-            flex={1} in all flatlsit parent View containers and padding on bottom
-          */}
-          <Box mt={3} flex={1}>
-            <FlatList
+          <Box flex={1} mt={3} pb={10}>
+            <FlashList
               data={fields.filter(
                 field =>
                   field.fieldName
-                    .toLowerCase()
+                    .toString()
                     .includes(inputValue.toLowerCase()) ||
                   field.ownerName
                     .toLowerCase()
                     .includes(inputValue.toLowerCase()),
               )}
-              keyExtractor={field => field.id.toString()}
-              contentContainerStyle={{paddingBottom: 40}}
-              renderItem={({item}) => <FieldCard field={item} />}
+              renderItem={renderItem}
+              estimatedItemSize={100}
+              ListEmptyComponent={<Flex>List is Empty</Flex>}
             />
           </Box>
         </Box>
