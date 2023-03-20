@@ -4,12 +4,17 @@ import {
   Button,
   FormControl,
   HStack,
+  Icon,
+  IconButton,
   Input,
+  Text,
   TextArea,
   useToast,
   VStack,
 } from 'native-base';
-import React from 'react';
+
+import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, {useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {BSON} from 'realm';
@@ -18,6 +23,7 @@ import CustomAlert from '../components/Alert';
 import Layout from '../components/Layout';
 import {RealmContext} from '../models';
 import {Field} from '../models/Field';
+import ConfirmModal from '../components/modals/ConfirmModal';
 
 const {useRealm} = RealmContext;
 
@@ -35,12 +41,13 @@ type Props = NativeStackScreenProps<RootStackParamList, 'EditField'>;
 
 // TODO: add loading
 const EditField = ({route, navigation}: Props) => {
+  const [showModal, setShowModal] = useState(false);
+
   const {fieldId} = route.params;
 
   const realm = useRealm();
 
   // Type casting is required to properly type the result
-
   const field = realm.objectForPrimaryKey<Field>(
     'Field',
     // Convert string fieldId back to ObjectId
@@ -89,6 +96,11 @@ const EditField = ({route, navigation}: Props) => {
     });
     navigation.navigate('AllRoutes');
   };
+
+  if (!field) {
+    console.log('No field: ', field);
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <Layout>
@@ -213,14 +225,31 @@ const EditField = ({route, navigation}: Props) => {
                 {errors.notes?.message}
               </FormControl.ErrorMessage>
             </FormControl>
-            <Button
-              mt={3}
-              bg="darkBlue.800"
-              _pressed={{bg: 'darkBlue.900'}}
-              onPress={handleSubmit(onSubmit)}>
-              Αποθήκευση
-            </Button>
+            <HStack justifyContent="flex-end" mt={3} space={3}>
+              <IconButton
+                bg="red.700"
+                _pressed={{bg: 'red.800'}}
+                icon={
+                  <Icon color="warmGray.200" size={5} as={MCI} name="delete" />
+                }
+                onPress={() => {
+                  setShowModal(true);
+                }}
+              />
+              <Button
+                flex={1}
+                bg="darkBlue.800"
+                _pressed={{bg: 'darkBlue.900'}}
+                onPress={handleSubmit(onSubmit)}>
+                Αποθήκευση
+              </Button>
+            </HStack>
           </VStack>
+          <ConfirmModal
+            field={field}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
         </Box>
       </TouchableWithoutFeedback>
     </Layout>
